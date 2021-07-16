@@ -1,0 +1,24 @@
+{
+  "name": "@marnickvda/ngx-translate-spec",
+  "version": "0.0.1",
+  "description": "A library that manages conformance of translation .json files to a specification in an Angular project",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "angular",
+    "ngx-translate",
+    "i18n",
+    "specification",
+    "implementation",
+    "conformance",
+    "schema",
+    "meta-model",
+    "model-driven engineering",
+    "MDE"
+  ],
+  "author": "Marnick van der Arend",
+  "license": "MIT",
+  "repository": "https://github.com/MarnickvdA/ngx-translate-spec"
+}
