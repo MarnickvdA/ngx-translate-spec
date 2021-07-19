@@ -22,24 +22,24 @@ function writeJSON(path, jsonObject) {
 
 function removeValuesFromImplementation(file, callback) {
     function resetNodeValues(object, callback) {
-        let schema = {};
+        let specification = {};
 
         // Iterate through children of node
         Object.keys(object).forEach(value => {
             if (object[value] instanceof Object) {
                 // Iterate through child(ren)
-                resetNodeValues(object[value], data => schema[value] = data);
+                resetNodeValues(object[value], data => specification[value] = data);
             } else {
                 // Reset value of leaf to empty string
                 object[value] = '';
-                schema = object;
+                specification = object;
             }
         });
 
-        callback(schema);
+        callback(specification);
     }
 
-    readJSON(file, data => resetNodeValues(data, schema => callback(schema)));
+    readJSON(file, data => resetNodeValues(data, specification => callback(specification)));
 }
 
 function conformImplementationToSpecification(implementation, specification, callback, prefix = '') {
@@ -70,8 +70,8 @@ function conformTranslationImplementationsToSpecification(translationsDirectory,
     fs.readdirSync(translationsDirectory, {
         withFileTypes: true
     }).forEach(file => {
-        if (file.isFile() && file.name.endsWith('.json') && file.name !== 'schema.json') {
-            console.log("Restructuring " + file.name + " to conform to schema.");
+        if (file.isFile() && file.name.endsWith('.json') && file.name !== 'specification.json') {
+            console.log("Restructuring " + file.name + " to conform to specification.");
             let filePath = translationsDirectory + '/' + file.name;
             readJSON(filePath, impl => conformImplementationToSpecification(impl, spec, newImpl => writeJSON(filePath, newImpl)));
         }
@@ -111,5 +111,5 @@ module.exports.extractSpecificationFromImplementation = function (translationsDi
  */
 module.exports.copyTranslations = function (translationsDirectory, specPrefix) {
     console.log(`Retrieving specification from ${translationsDirectory}/specification.json`);
-    readJSON(`${translationsDirectory}/specification.json`, schema => conformTranslationImplementationsToSpecification(translationsDirectory, schema));
+    readJSON(`${translationsDirectory}/specification.json`, specification => conformTranslationImplementationsToSpecification(translationsDirectory, specification));
 }
