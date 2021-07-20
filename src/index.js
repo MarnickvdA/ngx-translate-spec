@@ -44,10 +44,6 @@ function removeValuesFromImplementation(file, callback) {
 
 function conformImplementationToSpecification(implementation, specification, callback, prefix = '') {
     function replaceNodeValues(implNode, specNode, callback) {
-        if (!implementation || Object.keys(implementation).length === 0) {
-            return specification;
-        }
-
         // Iterate through children of node
         Object.keys(specNode).forEach(key => {
             if (specNode[key] instanceof Object) {
@@ -63,17 +59,19 @@ function conformImplementationToSpecification(implementation, specification, cal
         callback(specNode);
     }
 
-    replaceNodeValues(implementation, specification, data => callback(data));
+    replaceNodeValues(implementation, specification, data => {
+        callback(data);
+    });
 }
 
-function conformTranslationImplementationsToSpecification(translationsDirectory, spec) {
+function conformTranslationImplementationsToSpecification(translationsDirectory, spec, prefix) {
     fs.readdirSync(translationsDirectory, {
         withFileTypes: true
     }).forEach(file => {
         if (file.isFile() && file.name.endsWith('.json') && file.name !== 'specification.json') {
             console.log("Restructuring " + file.name + " to conform to specification.");
             let filePath = translationsDirectory + '/' + file.name;
-            readJSON(filePath, impl => conformImplementationToSpecification(impl, spec, newImpl => writeJSON(filePath, newImpl)));
+            readJSON(filePath, impl => conformImplementationToSpecification(impl, spec, newImpl => writeJSON(filePath, newImpl), prefix));
         }
     });
 }
@@ -111,5 +109,5 @@ module.exports.extractSpecificationFromImplementation = function (translationsDi
  */
 module.exports.copyTranslations = function (translationsDirectory, specPrefix) {
     console.log(`Retrieving specification from ${translationsDirectory}/specification.json`);
-    readJSON(`${translationsDirectory}/specification.json`, specification => conformTranslationImplementationsToSpecification(translationsDirectory, specification));
+    readJSON(`${translationsDirectory}/specification.json`, specification => conformTranslationImplementationsToSpecification(translationsDirectory, specification, specPrefix));
 }
