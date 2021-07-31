@@ -28,7 +28,7 @@ Tested with Node `v14.17.0`
 ## Installation
 
 ```
-npm i --save @marnickvda/ngx-translate-spec
+npm i --save-dev @marnickvda/ngx-translate-spec
 ```
 
 ## Functions

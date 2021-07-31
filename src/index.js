@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const cloneDeep = require('lodash.clonedeep');
 
 function readJSON(path, callback) {
     let data = fs.readFileSync(path, {encoding: 'utf-8'});
@@ -51,7 +52,11 @@ function conformImplementationToSpecification(implementation, specification, cal
                 replaceNodeValues(implNode[key], specNode[key], data => specNode[key] = data);
             } else {
                 // Reset value of leaf to the implementation value
-                specNode[key] = implNode[key] || prefix + specNode[key];
+                if (implNode && implNode[key]) {
+                    specNode[key] = implNode[key];
+                } else {
+                    specNode[key] = prefix + specNode[key];
+                }
             }
         });
 
@@ -59,7 +64,7 @@ function conformImplementationToSpecification(implementation, specification, cal
         callback(specNode);
     }
 
-    replaceNodeValues(implementation, specification, data => {
+    replaceNodeValues(cloneDeep(implementation), cloneDeep(specification), data => {
         callback(data);
     });
 }

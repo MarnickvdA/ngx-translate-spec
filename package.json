@@ -20,5 +20,8 @@
   ],
   "author": "Marnick van der Arend",
   "license": "MIT",
-  "repository": "https://github.com/MarnickvdA/ngx-translate-spec"
+  "repository": "https://github.com/MarnickvdA/ngx-translate-spec",
+  "dependencies": {
+    "lodash.clonedeep": "^4.5.0"
+  }
 }
